@@ -1,50 +1,87 @@
-import React, { useMemo } from 'react';
-import InfoRow from './InfoRow';
+import React from 'react';
+import { View, Text, Button, Modal, StyleSheet } from 'react-native';
 
 function InfoModalContent({ item, onClose }) {
   return (
-    <div className="relative bg-white rounded-lg shadow">
-      <div className="flex items-start justify-between p-4 border-b rounded-t">
-        <h2 className="text-lg font-semibold text-gray-800">Información del Usuario</h2>
-      </div>
-      <div className="p-4">
-        <dl className="flex gap-2 flex-col">
-          <InfoRow label="Id" value={item.id} />
-          <InfoRow label="Titulo" value={item.title === 'miss' ? 'Sra' : item.title} />
-          <InfoRow label="Nombres" value={item.firstName} />
-          <InfoRow label="Apellidos" value={item.lastName} />
-          <InfoRow label="Foto" value={item.picture} />
-        </dl>
-      </div>
-      <div className="flex items-center space-x-3 p-4 rounded-lg">
-        <button
-          onClick={onClose}
-          type="button"
-          className="text-gray-500 bg-white hover:bg-gray-100 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10"
-        >
-          Cerrar
-        </button>
-      </div>
-    </div>
+    <View style={styles.modalContent}>
+      <Text style={styles.modalTitle}>Información del Usuario</Text>
+      <View style={styles.infoContainer}>
+        <Text style={styles.infoLabel}>Id:</Text>
+        <Text style={styles.infoValue}>{item.id}</Text>
+      </View>
+      <View style={styles.infoContainer}>
+        <Text style={styles.infoLabel}>Titulo:</Text>
+        <Text style={styles.infoValue}>{item.title === 'miss' ? 'Sra' : item.title}</Text>
+      </View>
+      <View style={styles.infoContainer}>
+        <Text style={styles.infoLabel}>Nombres:</Text>
+        <Text style={styles.infoValue}>{item.firstName}</Text>
+      </View>
+      <View style={styles.infoContainer}>
+        <Text style={styles.infoLabel}>Apellidos:</Text>
+        <Text style={styles.infoValue}>{item.lastName}</Text>
+      </View>
+      <View style={styles.infoContainer}>
+        <Text style={styles.infoLabel}>Foto:</Text>
+        <Text style={styles.infoValue}>{item.picture}</Text>
+      </View>
+      <View style={styles.buttonContainer}>
+        <Button title="Cerrar" onPress={onClose} color="#4ed964" />
+      </View>
+    </View>
   );
 }
 
-function InfoModal({ isOpen, onClose, item }) {
-  const memoizedContent = useMemo(() => <InfoModalContent item={item} onClose={onClose} />, [item, onClose]);
-
+function InfoModal({ isVisible, onClose, item }) {
   if (!item) {
     return null;
   }
 
   return (
-    <div
-      className={`modal ${
-        isOpen ? 'flex' : 'hidden'
-      } fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full`}
-    >
-      <div className="relative w-full max-w-2xl max-h-full m-auto shadow">{memoizedContent}</div>
-    </div>
+    <Modal transparent={true} visible={isVisible} animationType="slide">
+      <View style={styles.modalContainer}>
+        <InfoModalContent item={item} onClose={onClose} />
+      </View>
+    </Modal>
   );
 }
 
-export default React.memo(InfoModal);
+const styles = StyleSheet.create({
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    width: 300,
+    padding: 20,
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  infoContainer: {
+    flexDirection: 'row',
+    marginBottom: 10,
+  },
+  infoLabel: {
+    fontWeight: 'bold',
+    marginRight: 10,
+  },
+  infoValue: {
+    flex: 1,
+  },
+  buttonContainer: {
+    marginTop: 20,
+  },
+});
+
+export default InfoModal;

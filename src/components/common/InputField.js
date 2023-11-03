@@ -1,12 +1,32 @@
-export default function InputField({ label, name, value, onChange }) { return (
-<div className="flex items-center space-x-3">
-  <label htmlFor="{name}" className="w-1/6 text-left font-semibold text-gray-700"> {label}: </label>
-  <input
-    type="text"
-    name="{name}"
-    value="{value}"
-    onChange="{onChange}"
-    className="px-2 py-2 border border-gray-300 rounded-md flex-1 focus:outline-none text-gray-600"
-  />
-</div>
-); }
+import React from 'react';
+import { View, Text, TextInput, StyleSheet } from 'react-native';
+
+export default function InputField({ label, name, value, onChange }) {
+  return (
+    <View style={styles.inputContainer}>
+      <Text style={styles.label}>{label}:</Text>
+      <TextInput style={styles.input} placeholder={label} onChangeText={onChange} value={value} />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 10,
+  },
+  label: {
+    width: '20%',
+    fontWeight: 'bold',
+    color: '#444b6e',
+  },
+  input: {
+    flex: 1,
+    paddingLeft: 10,
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 5,
+    height: 40,
+  },
+});

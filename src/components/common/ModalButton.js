@@ -1,23 +1,29 @@
 import React from 'react';
+import { View, Button, Text, StyleSheet } from 'react-native';
 
 export default function ModalButtons({ onCancel, onSave, isSaving, textButton, textButton2 }) {
   return (
-    <div className="flex items-center space-x-3 p-4 border-b rounded-t">
-      <button
-        onClick={onCancel}
-        type="button"
-        className="text-gray-500 bg-white hover:bg-gray-100 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10"
-      >
-        Cancelar
-      </button>
-      <button
-        onClick={onSave}
-        type="button"
-        className="text-white bg-[#4ed964] hover:opacity-80 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5"
+    <View style={styles.buttonContainer}>
+      <Button title="Cancelar" onPress={onCancel} color="#4ed964" accessibilityLabel="Cancelar" />
+      <Button
+        title={isSaving ? textButton2 : textButton}
+        onPress={onSave}
+        color="#4ed964"
         disabled={isSaving}
-      >
-        {isSaving ? textButton2 : textButton}
-      </button>
-    </div>
+        accessibilityLabel="Guardar"
+      />
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 16,
+    borderBottomWidth: 1,
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
+    borderColor: 'gray',
+  },
+});

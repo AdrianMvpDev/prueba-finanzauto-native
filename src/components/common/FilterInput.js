@@ -1,18 +1,31 @@
 import React from 'react';
+import { View, TextInput, Text, Button, StyleSheet } from 'react-native';
 
 export default function FilterInput({ filterTerm, setFilterTerm }) {
   return (
-    <div className="flex items-center md:mb-4">
-      <input
-        type="text"
+    <View style={styles.inputContainer}>
+      <TextInput
+        style={styles.input}
         placeholder="Filtrar por ID o nombre"
-        className="px-2 py-2 border border-gray-300 rounded-md flex-1 focus-visible:outline-none text-[#444b6e]"
         value={filterTerm}
-        onChange={(e) => setFilterTerm(e.target.value)}
+        onChangeText={(text) => setFilterTerm(text)}
       />
-      <button className="bg-red-500 text-white px-2 py-2 ml-2 rounded-md hover:opacity-80" onClick={() => setFilterTerm('')}>
-        Limpiar
-      </button>
-    </div>
+      <Button title="Limpiar" color="#ff0000" onPress={() => setFilterTerm('')} />
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  input: {
+    flex: 1,
+    padding: 10,
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 5,
+  },
+});

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
+import { View, Text, Modal, Button, StyleSheet } from 'react-native';
 import { deleteUserData, fetchUserData } from '../../services/api';
-import ModalButtons from './ModalButtons';
 
-export default function DeleteModal({ isOpen, onClose, item, onUserDeleted, setUserData }) {
+export default function DeleteModal({ isVisible, onClose, item, onUserDeleted, setUserData }) {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = async () => {
@@ -20,8 +20,6 @@ export default function DeleteModal({ isOpen, onClose, item, onUserDeleted, setU
           setUserData(updatedData);
         }
       }
-
-      onClose();
     } catch (error) {
       console.error('Error al eliminar el usuario:', error);
     } finally {
@@ -31,28 +29,46 @@ export default function DeleteModal({ isOpen, onClose, item, onUserDeleted, setU
   };
 
   return (
-    <div
-      className={`modal ${
-        isOpen ? 'flex' : 'hidden'
-      } fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full`}
-    >
-      <div className="relative w-full max-w-2xl max-h-full m-auto shadow">
-        <div className="relative bg-white rounded-lg shadow">
-          <div className="flex items-start justify-between p-4 border-b rounded-t">
-            <h2 className="text-lg font-semibold text-gray-800">Eliminar Usuario</h2>
-          </div>
-          <div className="flex items-center space-x-3 p-4 border-b">
-            <p>Estas seguro de eliminar este usuario?</p>
-          </div>
-          <ModalButtons
-            onCancel={onClose}
-            onSave={handleDelete}
-            isSaving={isDeleting}
-            textButton={'Eliminar'}
-            textButton2={'Eliminando...'}
-          />
-        </div>
-      </div>
-    </div>
+    <Modal transparent={true} visible={isVisible} animationType="slide">
+      <View style={styles.modalContainer}>
+        <View style={styles.modalContent}>
+          <Text style={styles.modalTitle}>Eliminar Usuario</Text>
+          <Text>¿Estás seguro de eliminar este usuario?</Text>
+          <View style={styles.buttonContainer}>
+            <Button title="Cancelar" onPress={onClose} />
+            <Button title={isDeleting ? 'Eliminando...' : 'Eliminar'} onPress={handleDelete} disabled={isDeleting} />
+          </View>
+        </View>
+      </View>
+    </Modal>
   );
 }
+
+const styles = StyleSheet.create({
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    width: 300,
+    padding: 20,
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 20,
+  },
+});

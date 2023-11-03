@@ -1,10 +1,8 @@
-import { useState, useEffect, useCallback, lazy, Suspense } from 'react';
-import { fetchUserData, updateUserData } from '../../services/api';
-import ModalButtons from './ModalButtons';
-const LazyInputField = lazy(() => import('./InputField'));
-const LazySelectField = lazy(() => import('./SelectField'));
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, Text, Button, Modal, TextInput, StyleSheet } from 'react-native';
+import { updateUserData } from '../../services/api';
 
-export default function EditModal({ isOpen, onClose, item, setUserData }) {
+export default function EditModal({ isVisible, onClose, item, setUserData }) {
   const [editedItem, setEditedItem] = useState(item || {});
   const [isSaving, setIsSaving] = useState(false);
 
@@ -15,8 +13,7 @@ export default function EditModal({ isOpen, onClose, item, setUserData }) {
   }, [item]);
 
   const handleFieldChange = useCallback(
-    (e) => {
-      const { name, value } = e.target;
+    (name, value) => {
       setEditedItem({
         ...editedItem,
         [name]: value,
@@ -41,27 +38,76 @@ export default function EditModal({ isOpen, onClose, item, setUserData }) {
   }, [editedItem, onClose, setUserData]);
 
   return (
-    <div
-      className={`modal ${
-        isOpen ? 'flex' : 'hidden'
-      } fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full`}
-    >
-      <div className="relative w-full max-w-2xl max-h-full m-auto shadow">
-        <div className="relative bg-white rounded-lg shadow border-[#1a6e6a]">
-          <div className="flex items-start justify-between p-4 border-b rounded-t">
-            <h2 className="text-lg font-semibold text-gray-800">Editar Usuario</h2>
-          </div>
-          <form className="p-4 border-b rounded-t space-y-3">
-            <Suspense fallback={<div>Cargando...</div>}>
-              <LazySelectField label="Título" name="title" value={editedItem.title} onChange={handleFieldChange} />
-              <LazyInputField label="Nombres" name="firstName" value={editedItem.firstName} onChange={handleFieldChange} />
-              <LazyInputField label="Apellidos" name="lastName" value={editedItem.lastName} onChange={handleFieldChange} />
-              <LazyInputField label="Foto" name="picture" value={editedItem.picture} onChange={handleFieldChange} />
-            </Suspense>
-          </form>
-          <ModalButtons onCancel={onClose} onSave={handleSave} isSaving={isSaving} textButton={'Guardar'} textButton2={'Guardando...'} />
-        </div>
-      </div>
-    </div>
+    <Modal transparent={true} visible={isVisible} animationType="slide">
+      <View style={styles.modalContainer}>
+        <View style={styles.modalContent}>
+          <Text style={styles.modalTitle}>Editar Usuario</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Título"
+            value={editedItem.title}
+            onChangeText={(text) => handleFieldChange('title', text)}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Nombres"
+            value={editedItem.firstName}
+            onChangeText={(text) => handleFieldChange('firstName', text)}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Apellidos"
+            value={editedItem.lastName}
+            onChangeText={(text) => handleFieldChange('lastName', text)}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Foto"
+            value={editedItem.picture}
+            onChangeText={(text) => handleFieldChange('picture', text)}
+          />
+          <View style={styles.buttonContainer}>
+            <Button title="Cancelar" onPress={onClose} />
+            <Button title={isSaving ? 'Guardando...' : 'Guardar'} onPress={handleSave} disabled={isSaving} />
+          </View>
+        </View>
+      </View>
+    </Modal>
   );
 }
+
+const styles = StyleSheet.create({
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    width: 300,
+    padding: 20,
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  input: {
+    marginBottom: 10,
+    padding: 10,
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 5,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 20,
+  },
+});

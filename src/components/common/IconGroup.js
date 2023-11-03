@@ -1,14 +1,15 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { View, TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function IconGroup({ icons, onItemClick }) {
   return (
-    <div className="cursor-pointer">
+    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
       {icons.map((icon, index) => (
-        <div key={index} className={`${index < icons.length - 1 ? 'mr-2' : ''} inline-block`} onClick={() => onItemClick(icon)}>
-          <FontAwesomeIcon icon={icon} />
-        </div>
+        <TouchableOpacity key={index} onPress={() => onItemClick(icon)} style={{ marginRight: index < icons.length - 1 ? 10 : 0 }}>
+          <Ionicons name={icon} size={24} />
+        </TouchableOpacity>
       ))}
-    </div>
+    </View>
   );
 }

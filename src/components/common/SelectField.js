@@ -1,21 +1,33 @@
-export default function SelectField({ label, name, value, onChange }) {
+import React from 'react';
+import { View, Text, Picker, StyleSheet } from 'react-native';
+
+export default function SelectField({ label, value, onChange }) {
   return (
-    <div className="flex items-center space-x-3">
-      <label htmlFor={name} className="w-1/6 text-left font-semibold text-gray-700">
-        {label}:
-      </label>
-      <select
-        name={name}
-        value={value}
-        onChange={onChange}
-        className="px-2 py-2 border border-gray-300 rounded-md flex-1 focus:outline-none text-gray-600 capitalize"
-      >
-        <option value="miss">Miss</option>
-        <option value="ms">Ms</option>
-        <option value="mr">Mr</option>
-        <option value="mrs">Mrs</option>
-        <option value="dr">Dr</option>
-      </select>
-    </div>
+    <View style={styles.inputContainer}>
+      <Text style={styles.label}>{label}:</Text>
+      <Picker style={styles.input} selectedValue={value} onValueChange={(itemValue) => onChange(itemValue)}>
+        <Picker.Item label="Miss" value="miss" />
+        <Picker.Item label="Ms" value="ms" />
+        <Picker.Item label="Mr" value="mr" />
+        <Picker.Item label="Mrs" value="mrs" />
+        <Picker.Item label="Dr" value="dr" />
+      </Picker>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  label: {
+    width: '20%',
+    fontWeight: 'bold',
+    color: '#444b6e',
+  },
+  input: {
+    flex: 1,
+  },
+});
