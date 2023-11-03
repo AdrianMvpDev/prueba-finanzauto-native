@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, Button, FlatList, StyleSheet, Modal } from 'react-native';
-import InfoModal from '../common/InfoModal';
-import EditModal from '../common/EditModal';
-import DeleteModal from '../common/DeleteModal';
-import FilterInput from '../common/FilterInput';
+import InfoModal from './InfoModal';
+import EditModal from './EditModal';
+import DeleteModal from './DeleteModal';
 import Paginator from './Paginator';
+import FilterInput from '../common/FilterInput';
 
 export default function Table({ data, setUserData }) {
   const [filterTerm, setFilterTerm] = useState('');

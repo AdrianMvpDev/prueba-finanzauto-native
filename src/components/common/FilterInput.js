@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TextInput, Text, Button, StyleSheet } from 'react-native';
+import { View, TextInput, Button, StyleSheet } from 'react-native';
 
 export default function FilterInput({ filterTerm, setFilterTerm }) {
   return (
