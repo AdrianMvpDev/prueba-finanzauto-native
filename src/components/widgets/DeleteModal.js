@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, Modal, Button, StyleSheet } from 'react-native';
+import { View, Text, Modal, StyleSheet, TouchableOpacity } from 'react-native';
 import { deleteUserData, fetchUserData } from '../../services/api';
+import { Feather } from '@expo/vector-icons';
 
 export default function DeleteModal({ isVisible, onClose, item, onUserDeleted, setUserData }) {
   const [isDeleting, setIsDeleting] = useState(false);
@@ -32,11 +33,51 @@ export default function DeleteModal({ isVisible, onClose, item, onUserDeleted, s
     <Modal transparent={true} visible={isVisible} animationType="slide">
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
-          <Text style={styles.modalTitle}>Eliminar Usuario</Text>
-          <Text>¿Estás seguro de eliminar este usuario?</Text>
+          <Text style={styles.modalTitle}>Novedad</Text>
+          <Text style={{ color: '#166D6B', fontSize: 43, fontWeight: 'bold', marginBottom: 60 }}>Eliminar</Text>
+          <Text style={{ color: '#4E4E4E', fontSize: 24, fontWeight: 'bold', marginBottom: 30 }}>
+            ¿Está seguro que desea eliminar el registro?
+          </Text>
           <View style={styles.buttonContainer}>
-            <Button title="Cancelar" onPress={onClose} />
-            <Button title={isDeleting ? 'Eliminando...' : 'Eliminar'} onPress={handleDelete} disabled={isDeleting} />
+            <TouchableOpacity
+              onPress={handleDelete}
+              disabled={isDeleting}
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                width: 222,
+                height: 50,
+                backgroundColor: '#A2D033',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: 18,
+                gap: 8,
+              }}
+            >
+              <Feather name="check" size={19} color={'#FFFFFF'} />
+              <Text style={{ color: '#FFFFFF', fontSize: 16 }} onPress={handleDelete}>
+                {isDeleting ? 'Eliminando...' : 'Aceptar'}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                width: 222,
+                height: 50,
+                backgroundColor: '#FFFFFF',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: 18,
+                borderWidth: 1,
+                borderColor: '#EFEFEF',
+                gap: 8,
+              }}
+              onPress={onClose}
+            >
+              <Feather name="x" size={19} color={'#A1A2A1'} />
+              <Text style={{ color: '#A1A2A1', fontSize: 16 }}>Cancelar</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -49,10 +90,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#166D6B',
   },
   modalContent: {
     backgroundColor: 'white',
-    width: 300,
+    width: '86%',
     padding: 20,
     borderRadius: 8,
     shadowColor: '#000',
@@ -62,13 +104,14 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   modalTitle: {
-    fontSize: 18,
+    color: '#A2D033',
+    fontSize: 30,
     fontWeight: 'bold',
-    marginBottom: 10,
   },
   buttonContainer: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'space-around',
-    marginTop: 20,
+    alignItems: 'center',
+    gap: 17,
   },
 });

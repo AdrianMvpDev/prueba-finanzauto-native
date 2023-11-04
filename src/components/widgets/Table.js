@@ -1,51 +1,22 @@
 import React, { useState } from 'react';
-import { View, Text, Button, FlatList, StyleSheet, Modal } from 'react-native';
-import InfoModal from './InfoModal';
-import EditModal from './EditModal';
+import { View, Text, StyleSheet, Modal, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import DeleteModal from './DeleteModal';
-import Paginator from './Paginator';
-import FilterInput from '../common/FilterInput';
+import { useNavigation } from '@react-navigation/native';
 
 export default function Table({ data, setUserData }) {
-  const [filterTerm, setFilterTerm] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
-
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const navigation = useNavigation();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
 
-  const filteredData =
-    data && data.data
-      ? data.data.filter((item) =>
-          `${item.id} ${item.title} ${item.firstName} ${item.lastName}`.toLowerCase().includes(filterTerm.toLowerCase())
-        )
-      : [];
-
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-
-  const itemsToShow = filteredData.slice(startIndex, endIndex);
-
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
-
   const handleIconClick = (icon, item) => {
-    if (icon === 'edit') {
-      setSelectedItem(item);
-      setIsEditModalOpen(true);
-    } else if (icon === 'delete') {
+    if (icon === 'delete') {
       setSelectedItem(item);
       setIsDeleteModalOpen(true);
-    } else if (icon === 'info') {
-      setSelectedItem(item);
-      setIsInfoModalOpen(true);
     }
   };
 
-  const handleUserDeleted = (userId) => {
+  const handleUserDeleted = (userId) => { 
     if (data && data.data) {
       const updatedData = data.data.filter((user) => user.id !== userId);
       setUserData({ ...data, data: updatedData });
@@ -53,44 +24,46 @@ export default function Table({ data, setUserData }) {
   };
 
   const closeModal = () => {
-    setIsEditModalOpen(false);
     setIsDeleteModalOpen(false);
-    setIsInfoModalOpen(false);
   };
 
   if (!data) {
-    return <Text>Cargando...</Text>;
+    return <ActivityIndicator size="large" color="#166D6B" />;
   }
-
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
   return (
     <View style={styles.container}>
-      <FilterInput filterTerm={filterTerm} setFilterTerm={setFilterTerm} />
-      <FlatList
-        data={itemsToShow}
-        renderItem={({ item }) => (
+      {data?.data.map((item) => (
+        <React.Fragment key={item.id}>
           <View style={styles.tableRow}>
-            <Text>Id: {item.id}</Text>
-            <Text>Titulo: {item.title === 'miss' ? 'Sra' : item.title}</Text>
-            <Text>Nombres: {item.firstName}</Text>
-            <Text>Apellidos: {item.lastName}</Text>
-            <Text>Foto: {item.picture}</Text>
-            <View style={styles.buttonContainer}>
-              <Button title="Editar" onPress={() => handleIconClick('edit', item)} />
-              <Button title="Eliminar" onPress={() => handleIconClick('delete', item)} />
-              <Button title="Info" onPress={() => handleIconClick('info', item)} />
+            <View
+              style={{ backgroundColor: '#CCE6E3', borderRadius: 26, position: 'absolute', top: 0, width: '100%', height: 117, left: 0 }}
+            />
+            <View style={{ flexDirection: 'row', gap: 20, flexWrap: 'wrap' }}>
+              <View style={{ width: 140, height: 143, borderWidth: 1, borderColor: '#707070', borderRadius: 15 }}>
+                <Image source={item.picture} style={{ width: '100%', height: '100%', borderRadius: 15 }} />
+              </View>
+              <TouchableOpacity onPress={() => navigation.navigate('UserDetail', { userId: item?.id })} style={{ flex: 1 }}>
+                <Text
+                  style={{ color: '#166D6B', fontSize: 22, fontWeight: 'bold', marginBottom: 10, minHeight: 60 }}
+                  ellipsizeMode="tail"
+                  numberOfLines={2}
+                >
+                  {item.title === 'miss' ? 'Sra' : item.title} {item.firstName} {item.lastName}
+                </Text>
+                <Text style={{ color: '#4E4E4E', fontSize: 11, fontWeight: 'bold', marginBottom: 36 }}>ID: {item.id} </Text>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                  <Text style={{ color: '#166D6B', fontSize: 14, fontWeight: 'bold' }}>Ver Detalle</Text>
+                  <TouchableOpacity onPress={() => handleIconClick('delete', item)}>
+                    <Ionicons name="trash" size={18} color="#F00000" style={{ marginRight: 8 }} />
+                  </TouchableOpacity>
+                  <Ionicons name="chevron-forward" size={18} color="#166D6B" style={{ marginRight: 8 }} />
+                </View>
+              </TouchableOpacity>
             </View>
           </View>
-        )}
-        keyExtractor={(item) => item.id.toString()}
-      />
-      <Paginator totalPages={totalPages} currentPage={currentPage} onPageChange={handlePageChange} />
-      <Modal transparent={true} visible={isEditModalOpen} animationType="slide">
-        <View style={styles.modalContainer}>
-          <EditModal isVisible={isEditModalOpen} onClose={closeModal} item={selectedItem} setUserData={setUserData} />
-        </View>
-      </Modal>
+        </React.Fragment>
+      ))}
       <Modal transparent={true} visible={isDeleteModalOpen} animationType="slide">
         <View style={styles.modalContainer}>
           <DeleteModal
@@ -102,27 +75,24 @@ export default function Table({ data, setUserData }) {
           />
         </View>
       </Modal>
-      <Modal transparent={true} visible={isInfoModalOpen} animationType="slide">
-        <View style={styles.modalContainer}>
-          <InfoModal isVisible={isInfoModalOpen} onClose={closeModal} item={selectedItem} />
-        </View>
-      </Modal>
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 15,
-    backgroundColor: 'white',
+    marginHorizontal: 30,
+    display: 'flex',
+    gap: 20,
+    marginBottom: 40,
   },
   tableRow: {
     padding: 10,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 10,
-    borderRadius: 8,
-    backgroundColor: '#EDEDED',
+    borderRadius: 26,
+    backgroundColor: '#EFEFEF',
+    position: 'relative',
+    height: 163,
   },
   buttonContainer: {
     flexDirection: 'row',

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 import Table from '../components/widgets/Table';
 import { fetchUserData } from '../services/api';
+import Header from '../components/layout/Header';
 
 export default function Home() {
   const [userData, setUserData] = useState(null);
@@ -17,15 +18,17 @@ export default function Home() {
     };
 
     fetchData();
-  }, []);
-
-  console.log(userData);
+  }, [userData]);
 
   return (
-    <View>
-      <View style={{ backgroundColor: '#fefffd' }}>
+    <ScrollView style={{ flex: 1, backgroundColor: '#F9FBFB' }} showsVerticalScrollIndicator={false}>
+      <Header />
+      <Text style={{ color: '#4E4E4E', fontSize: 30, fontWeight: 'bold', maxWidth: 362, padding: 30 }}>
+        Consulta y Registro de Usuarios
+      </Text>
+      <View>
         <Table data={userData} setUserData={setUserData} />
       </View>
-    </View>
+    </ScrollView>
   );
 }

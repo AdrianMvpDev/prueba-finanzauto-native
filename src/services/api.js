@@ -1,16 +1,28 @@
 import axios from 'axios';
 
-const apiKey = '6542e26ce797a5ea92c029f6';
+const apiKey = '65456a87ca30941886739588';
 const API_BASE_URL = 'https://dummyapi.io/data/v1/user';
 
 export async function fetchUserData() {
   try {
-    const response = await axios.get(API_BASE_URL, {
+    const response = await axios.get(`${API_BASE_URL}/?page=1&limit=6`, {
       headers: {
         'app-id': apiKey,
       },
-      params: {
-        limit: 50,
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error('Error al obtener datos:', error);
+    throw error;
+  }
+}
+
+export async function fetchOneUserData(userId) {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/${userId}`, {
+      headers: {
+        'app-id': apiKey,
       },
     });
 
