@@ -38,7 +38,8 @@ export default function AppNavigator() {
           tabBarStyle: {
             height: 97,
             bottom: 0,
-            borderRadius: 20,
+            borderTopLeftRadius: 20,
+            borderTopRightRadius: 20,
           },
         }}
       >

@@ -16,7 +16,7 @@ export default function Table({ data, setUserData }) {
     }
   };
 
-  const handleUserDeleted = (userId) => { 
+  const handleUserDeleted = (userId) => {
     if (data && data.data) {
       const updatedData = data.data.filter((user) => user.id !== userId);
       setUserData({ ...data, data: updatedData });
@@ -37,11 +37,19 @@ export default function Table({ data, setUserData }) {
         <React.Fragment key={item.id}>
           <View style={styles.tableRow}>
             <View
-              style={{ backgroundColor: '#CCE6E3', borderRadius: 26, position: 'absolute', top: 0, width: '100%', height: 117, left: 0 }}
+              style={{
+                backgroundColor: '#CCE6E3',
+                borderRadius: 26,
+                position: 'absolute',
+                top: 0,
+                width: '100%',
+                height: 117,
+                left: 0,
+              }}
             />
-            <View style={{ flexDirection: 'row', gap: 20, flexWrap: 'wrap' }}>
+            <View style={{ flexDirection: 'row', gap: 20, flexWrap: 'wrap', padding: 10 }}>
               <View style={{ width: 140, height: 143, borderWidth: 1, borderColor: '#707070', borderRadius: 15 }}>
-                <Image source={item.picture} style={{ width: '100%', height: '100%', borderRadius: 15 }} />
+                <Image source={{ uri: item.picture }} style={{ width: '100%', height: '100%', borderRadius: 15 }} />
               </View>
               <TouchableOpacity onPress={() => navigation.navigate('UserDetail', { userId: item?.id })} style={{ flex: 1 }}>
                 <Text
@@ -51,7 +59,13 @@ export default function Table({ data, setUserData }) {
                 >
                   {item.title === 'miss' ? 'Sra' : item.title} {item.firstName} {item.lastName}
                 </Text>
-                <Text style={{ color: '#4E4E4E', fontSize: 11, fontWeight: 'bold', marginBottom: 36 }}>ID: {item.id} </Text>
+                <Text
+                  style={{ color: '#4E4E4E', fontSize: 11, fontWeight: 'bold', marginBottom: 36 }}
+                  ellipsizeMode="tail"
+                  numberOfLines={1}
+                >
+                  ID: {item.id}
+                </Text>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                   <Text style={{ color: '#166D6B', fontSize: 14, fontWeight: 'bold' }}>Ver Detalle</Text>
                   <TouchableOpacity onPress={() => handleIconClick('delete', item)}>
@@ -88,11 +102,11 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   tableRow: {
-    padding: 10,
     borderRadius: 26,
     backgroundColor: '#EFEFEF',
     position: 'relative',
     height: 163,
+    width: '100%',
   },
   buttonContainer: {
     flexDirection: 'row',

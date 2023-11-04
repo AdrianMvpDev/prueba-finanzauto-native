@@ -95,11 +95,22 @@ export default function UserDetailScreen({ route }) {
         </TouchableOpacity>
       </View>
       <View style={{ justifyContent: 'center', alignItems: 'center', marginBottom: 30 }}>
-        <Image source={userData.picture} style={{ height: 203, width: 198, borderRadius: 15, borderWidth: 1, borderColor: '#707070' }} />
+        <Image
+          source={{ uri: userData.picture }}
+          style={{ height: 203, width: 198, borderRadius: 15, borderWidth: 1, borderColor: '#707070' }}
+        />
       </View>
-      <View style={{ width: '100%' }}>
+      <View style={{ width: '100%', justifyContent: 'center', display: 'flex', alignItems: 'center' }}>
         <View
-          style={{ width: '86%', backgroundColor: '#F7F7F7', margin: 'auto', padding: 30, borderRadius: 26, gap: 20, marginBottom: 30 }}
+          style={{
+            width: '86%',
+            backgroundColor: '#F7F7F7',
+            margin: 'auto',
+            padding: 30,
+            borderRadius: 26,
+            gap: 20,
+            marginBottom: 30,
+          }}
         >
           <CustomTextInput label="ID" value={userData.id} editable={false} onChangeText={(text) => onChangeText('id', text)} />
           <CustomTextInput

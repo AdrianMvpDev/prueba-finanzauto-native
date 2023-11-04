@@ -7,6 +7,6 @@ export default function App() {
     <SafeAreaView style={{ flex: 1, paddingTop: Platform.OS === 'android' ? 25 : 0 }}>
       <AppNavigator />
       <StatusBar style="auto" />
-    </SafeAreaView>
+    </SafeAreaView> 
   );
 }

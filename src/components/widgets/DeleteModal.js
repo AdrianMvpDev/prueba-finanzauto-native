@@ -33,9 +33,11 @@ export default function DeleteModal({ isVisible, onClose, item, onUserDeleted, s
     <Modal transparent={true} visible={isVisible} animationType="slide">
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
-          <Text style={styles.modalTitle}>Novedad</Text>
-          <Text style={{ color: '#166D6B', fontSize: 43, fontWeight: 'bold', marginBottom: 60 }}>Eliminar</Text>
-          <Text style={{ color: '#4E4E4E', fontSize: 24, fontWeight: 'bold', marginBottom: 30 }}>
+          <View style={{ padding: 30, backgroundColor: '#F9FBFB', borderRadius: 20, marginBottom: 30 }}>
+            <Text style={styles.modalTitle}>Novedad</Text>
+            <Text style={{ color: '#166D6B', fontSize: 43, fontWeight: 'bold' }}>Eliminar</Text>
+          </View>
+          <Text style={{ color: '#4E4E4E', fontSize: 24, fontWeight: 'bold', marginBottom: 30, textAlign: 'center' }}>
             ¿Está seguro que desea eliminar el registro?
           </Text>
           <View style={styles.buttonContainer}>
@@ -95,7 +97,7 @@ const styles = StyleSheet.create({
   modalContent: {
     backgroundColor: 'white',
     width: '86%',
-    padding: 20,
+    padding: 30,
     borderRadius: 8,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
