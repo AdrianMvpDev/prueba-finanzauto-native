@@ -30,7 +30,7 @@ export default function DeleteModal({ isVisible, onClose, item, onUserDeleted, s
   };
 
   return (
-    <Modal transparent={true} visible={isVisible} animationType="slide">
+    <Modal transparent={false} visible={isVisible} animationType="slide">
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
           <View style={{ padding: 30, backgroundColor: '#F9FBFB', borderRadius: 20, marginBottom: 30 }}>
